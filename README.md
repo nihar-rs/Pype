@@ -14,7 +14,7 @@ A simple Python script to download images, GIFs, and videos from your **saved po
 
 - Python 3.7+
 - Reddit API credentials
-- `praw`, `requests`, `flask` (if using web integration)
+- `praw`, `requests`
 
 ## Installation:
 
