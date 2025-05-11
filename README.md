@@ -40,7 +40,12 @@ python3 src/Pype.py
 
 - [Reddit API](https://www.reddit.com/prefs/apps)
 
-  - create an app.
-  - collect `client-id`, `client-secret`, `app_name`(The name of the app you created).
+    - Go to the link above and click: `create an app`
+    - name: `any name(example: test)`
+    - type: `script`
+    - redirect url: `"http://localhost:8080"`
+    - After you create an app, you should find your client-id under: `personal use script`
+    - secret should be listed following: `secret`
+    - collect: `client-id`, `client-secret`, `app_name`(The name of the app you created).
 
 - use these credentials with the script.
