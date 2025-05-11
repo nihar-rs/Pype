@@ -48,9 +48,8 @@ def main():
     save_dir = "Downloads"
     os.makedirs(save_dir, exist_ok=True)
     downloaded = []
-    limit = 50
 
-    for item in user.saved(limit=limit):
+    for item in user.saved(limit=None):
         if isinstance(item, praw.models.Submission):
             url = item.url
             parsed = urlparse(url)
