@@ -8,13 +8,13 @@ A simple Python script to download images, GIFs, and videos from Reddit using th
 - Downloads media from specified-subreddits 
 - Supports `.jpg`, `.png`, `.gif`, `.mp4`, `.jpeg`
 - Automatically names files based on post titles
-- Uses your Reddit credentials securely from a `.env` file
+- Uses your Reddit credentials securely from a `.ini` file
 
 ### v0.2 Updates:
 
 - Resume support → skips files already downloaded
 - Parallel downloads with ThreadPoolExecutor
-- NSFW toggle (-nsfw)
+- NSFW toggle (--nsfw)
 - NSFW content goes into <output>/NSFW/<subreddit>/...
 - Cleaner graphics using tqdm
 - Slightly safer filename handling
@@ -23,7 +23,7 @@ A simple Python script to download images, GIFs, and videos from Reddit using th
 
 - Python 3.7+
 - Reddit API credentials
-- `praw`, `requests`
+- `praw`, `requests`, `rich`, `tqdm`
 
 ## Installation:
 
@@ -41,12 +41,11 @@ chmod +x setup.sh
 ```bash
 ./setup.sh
 ```
-- This command should display help message.
+- This command should display the help message.
 
-[OR]
-- Run the script manually:
+- Or run the script manually:
 ```bash
-python3 Pype.py --help
+python3 Pype.py -h
 ```
 
 ## API:
