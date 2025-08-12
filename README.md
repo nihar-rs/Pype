@@ -1,14 +1,23 @@
 # Pype
 
-A simple Python script to download images, GIFs, and videos from your **saved posts** on Reddit using the Reddit API.
+A simple Python script to download images, GIFs, and videos from Reddit using the Reddit API.
 
 ## 🚀 Features
 
 - Downloads media from saved Reddit posts
+- Downloads media from specified-subreddits 
 - Supports `.jpg`, `.png`, `.gif`, `.mp4`, `.jpeg`
 - Automatically names files based on post titles
-- Uses your Reddit credentials securely from a config file
-- Simple command-line interface.
+- Uses your Reddit credentials securely from a `.env` file
+
+### v0.2 Updates:
+
+- Resume support → skips files already downloaded
+- Parallel downloads with ThreadPoolExecutor
+- NSFW toggle (-nsfw)
+- NSFW content goes into <output>/NSFW/<subreddit>/...
+- Cleaner graphics using tqdm
+- Slightly safer filename handling
 
 ## 🔧 Requirements
 
@@ -18,25 +27,30 @@ A simple Python script to download images, GIFs, and videos from your **saved po
 
 ## Installation:
 
-- Give execution permission
+- Goto: 📁 src/
+```bash
+cd src/
+```
 
+- Give execution permission
 ```bash
 chmod +x setup.sh
 ```
 
 - Run setup
-
 ```bash
 ./setup.sh
 ```
+- This command should display help message.
 
-- Run the script:
-
-```python3
-python3 src/Pype.py
+[OR]
+- Run the script manually:
+```bash
+python3 Pype.py --help
 ```
 
 ## API:
+[!NOTE] Get the reddit api credentials before you run the script as you will need them to run it.
 
 - [Reddit API](https://www.reddit.com/prefs/apps)
 
