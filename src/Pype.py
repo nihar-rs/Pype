@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
-__description__ = "[Pype]: A reddit scraper that downloades your saved posts."
+__version__ = "0.2.0"
+__description__ = f"[Pype v{__version__}]: A Reddit scraper that downloads posts from specified subreddit and your saved media files."
 __author__ = "Nihar Satapathy"
 __date__ = "4th May 2025"
 
@@ -26,19 +27,29 @@ def login_reddit():
     config.read("config.ini")
 
     try:
+        app_name = config['reddit'].get('app_name', ''),
         reddit = praw.Reddit(
             username = config["reddit"].get("username", ""),
             password = config["reddit"].get("password", ""),
             client_id = config["reddit"].get("client_id", ""),
             client_secret = config["reddit"].get("client_secret", ""),
-            app_name = config["reddit"].get("app_name", ""),
-            user_agent = f"{config["reddit"].get("app_name", "")} by /u/{config["reddit"].get("username", "")}"
+            user_agent=f"{app_name} by /u/{config['reddit'].get('username','')}",
         )
+
         user = reddit.user.me()
         if not user:
             raise Exception("Login failed. Check credentials.")
         print(f"✅ Logged in as: {user}")
+
+        # Check NSFW setting
+        prefs = reddit.user.preferences()
+        if not prefs.get("over_18", False):
+            print("⚠️ Your account's NSFW setting is OFF. Enable it at:")
+            print("   https://www.reddit.com/settings/feed")
+        else:
+            print("🔞 NSFW content is enabled in your account preferences.")
         return reddit
+
     except Exception as e:
         print(f"❌ {e}")
         exit(1)
@@ -55,8 +66,7 @@ def download_from_items(items, save_dir):
             ext = os.path.splitext(parsed.path)[-1].lower()
 
             if ext in [".jpg", ".jpeg", ".png", ".gif", ".mp4"]:
-                title_safe = edit_filename(item.title)
-                filename = f"{title_safe}{ext}"
+                filename = f"{edit_filename(item.title)}_{item.id}{ext}"
                 filepath = os.path.join(save_dir, filename)
 
                 try:
@@ -72,7 +82,7 @@ def download_from_items(items, save_dir):
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Pype_v0.2 — Reddit Media Downloader")
+    parser = argparse.ArgumentParser(description=__description__)
     parser.add_argument("--subreddit", help="Subreddit name to download media from")
     parser.add_argument("--saved", action="store_true", help="Download saved media from your account")
     parser.add_argument("--limit", type=int, default=10, help="Number of posts to download")
@@ -82,18 +92,23 @@ def main():
 
     reddit = login_reddit()
 
+    def filter_posts(posts, limit, include_nsfw):
+        if include_nsfw:
+            filtered = list(posts)
+        else:
+            filtered = [p for p in posts if not getattr(p, "over_18", False)]
+        return filtered[:limit]
+
     if args.subreddit:
         subreddit = reddit.subreddit(args.subreddit)
-        posts = subreddit.hot(limit=args.limit)
-        if not args.nsfw:
-            posts = [p for p in posts if not p.over_18]
+        posts = subreddit.hot(limit=args.limit * 3)
+        posts = filter_posts(posts, args.limit, args.nsfw)
         download_from_items(posts, args.output)
 
     elif args.saved:
         user = reddit.user.me()
-        posts = user.saved(limit=args.limit)
-        if not args.nsfw:
-            posts = [p for p in posts if not p.over_18]
+        posts = user.saved(limit=args.limit * 3)
+        posts = filter_posts(posts, args.limit, args.nsfw)
         download_from_items(posts, args.output)
 
     else:

@@ -10,7 +10,7 @@ A simple Python script to download images, GIFs, and videos from Reddit using th
 - Automatically names files based on post titles
 - Uses your Reddit credentials securely from a `.ini` file
 
-### v0.2 Updates:
+### v0.2.0 Updates:
 
 - Resume support → skips files already downloaded
 - Parallel downloads with ThreadPoolExecutor
